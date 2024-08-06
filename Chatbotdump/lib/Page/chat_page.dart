@@ -47,10 +47,16 @@ class _ChatPageState extends State<ChatPage>{
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-                child: Text(
-                  "Telkom AI",
-                  style: TextStyle(color: Colors.black, fontSize: 24, fontFamily: 'Poppins', fontWeight: FontWeight.bold, letterSpacing: 0.01),
+              child: Text(
+                "Telkom AI",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.01
                 ),
+              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -64,8 +70,56 @@ class _ChatPageState extends State<ChatPage>{
               ),
             ),
             ListTile(
-              leading: Icon(Icons.menu),
+              leading: Icon(Icons.history),
               title: Text('History'),
+              onTap: (){
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Bagaimana prosedur OKR untuk seorang manager atau...'),
+              onTap: (){
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Cuti Bersalin'),
+              onTap: (){
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Informasi Umum KDMP'),
+              onTap: (){
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Bagaimana cara melakukan re-open OKR yang sudah closed ?'),
+              onTap: (){
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Kenapa saya tidak bisa update progress OKR ?'),
+              onTap: (){
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Untuk OKR yang telah terlanjur di delete apakah bisa dilakukan pengaktifan kembali ?'),
+              onTap: (){
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Bagaimana solusi untuk OKR yang sudah closed namun tercatat 0% ?'),
+              onTap: (){
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Implementasi Cuti Online'),
               onTap: (){
                 Navigator.pop(context);
               },
@@ -83,11 +137,11 @@ class _ChatPageState extends State<ChatPage>{
                 width: 100,
                 height: 100,
                 child: Transform.scale(
-                  scale: 0.8,
-                  child: Image.asset(
-                    'assets/images/logo.png',
-                    fit: BoxFit.contain,
-                  )
+                    scale: 0.8,
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      fit: BoxFit.contain,
+                    )
                 ),
               ),
             ),
@@ -108,16 +162,16 @@ class _ChatPageState extends State<ChatPage>{
                   },
                   messages: _messages,
                   inputOptions: InputOptions(inputDecoration: InputDecoration(
-                    fillColor: Colors.black26,
-                    filled: true,
-                    hintText: 'Write a Message',
-                    hintStyle: TextStyle(color: Colors.white),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(40.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: EdgeInsets.symmetric(vertical: 0.5, horizontal: 10.0)
-                    ),
+                      fillColor: Colors.black26,
+                      filled: true,
+                      hintText: 'Write a Message',
+                      hintStyle: TextStyle(color: Colors.white),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 0.5, horizontal: 10.0)
+                  ),
                   ),
                 ),
               ),
