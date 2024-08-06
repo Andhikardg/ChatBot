@@ -21,12 +21,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(
-          255,
-          255,
-          255,
-          1.0,
-        ),
+        backgroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
         actions: [
           CustomToggle(),
         ],
@@ -39,12 +34,11 @@ class _ChatPageState extends State<ChatPage> {
               child: Text(
                 "Telkom AI",
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.01,
-                ),
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.01),
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -58,39 +52,68 @@ class _ChatPageState extends State<ChatPage> {
                 ],
               ),
             ),
-            _HoverListTile(
-              icon: Icons.history,
-              title: 'History',
+            ListTile(
+              leading: Icon(Icons.history),
+              title: Text('History'),
               onTap: () {
-                // Implement navigation or action for the 'History' list item
+                Navigator.pop(context);
+                _sendSidebarMessage('History');
               },
             ),
-            _HoverListTile(
-              icon: Icons.person,
-              title: 'Profile',
+            ListTile(
+              title: Text('Bagaimana prosedur OKR untuk seorang manager atau...'),
               onTap: () {
-                // Implement navigation or action for the 'Profile' list item
+                Navigator.pop(context);
+                _sendSidebarMessage('Bagaimana prosedur OKR untuk seorang manager atau atasan yang tidak memiliki staf atau posisi dibawahnya kosong?');
               },
             ),
-            _HoverListTile(
-              icon: Icons.settings,
-              title: 'Settings',
+            ListTile(
+              title: Text('Cuti Bersalin'),
               onTap: () {
-                // Implement navigation or action for the 'Settings' list item
+                Navigator.pop(context);
+                _sendSidebarMessage('Cuti Bersalin');
               },
             ),
-            _HoverListTile(
-              icon: Icons.help,
-              title: 'Help',
+            ListTile(
+              title: Text('Informasi Umum KDMP'),
               onTap: () {
-                // Implement navigation or action for the 'Help' list item
+                Navigator.pop(context);
+                _sendSidebarMessage('Informasi Umum KDMP');
               },
             ),
-            _HoverListTile(
-              icon: Icons.logout,
-              title: 'Logout',
+            ListTile(
+              title: Text('Bagaimana cara melakukan re-open OKR yang sudah closed ?'),
               onTap: () {
-                // Implement navigation or action for the 'Logout' list item
+                Navigator.pop(context);
+                _sendSidebarMessage('Bagaimana cara melakukan re-open OKR yang sudah closed ?');
+              },
+            ),
+            ListTile(
+              title: Text('Kenapa saya tidak bisa update progress OKR ?'),
+              onTap: () {
+                Navigator.pop(context);
+                _sendSidebarMessage('Kenapa saya tidak bisa update progress OKR ?');
+              },
+            ),
+            ListTile(
+              title: Text('Untuk OKR yang telah terlanjur di delete apakah bisa dilakukan pengaktifan kembali ?'),
+              onTap: () {
+                Navigator.pop(context);
+                _sendSidebarMessage('Untuk OKR yang telah terlanjur di delete apakah bisa dilakukan pengaktifan kembali ?');
+              },
+            ),
+            ListTile(
+              title: Text('Bagaimana solusi untuk OKR yang sudah closed namun tercatat 0% ?'),
+              onTap: () {
+                Navigator.pop(context);
+                _sendSidebarMessage('Bagaimana solusi untuk OKR yang sudah closed namun tercatat 0% ?');
+              },
+            ),
+            ListTile(
+              title: Text('Implementasi Cuti Online'),
+              onTap: () {
+                Navigator.pop(context);
+                _sendSidebarMessage('Implementasi Cuti Online');
               },
             ),
           ],
@@ -136,7 +159,7 @@ class _ChatPageState extends State<ChatPage> {
                     inputDecoration: InputDecoration(
                       fillColor: Colors.black26,
                       filled: true,
-                      hintText: 'Write a Message',
+                      hintText: 'Write a Message...',
                       hintStyle: TextStyle(color: Colors.white),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(40.0),
@@ -155,8 +178,21 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  void _sendSidebarMessage(String text) {
+    final message = ChatMessage(
+      user: _currentUser,
+      createdAt: DateTime.now(),
+      text: text,
+    );
+    setState(() {
+      _messages.insert(0, message);
+    });
+    getChatResponse(message);
+  }
+
   Future<void> getChatResponse(ChatMessage m) async {
     setState(() {
+      // _messages.insert(0, m);
       _typingUsers.add(_gptChatUser);
     });
     List<Messages?> _messagesHistory = _messages.reversed.map((m) {
@@ -166,81 +202,29 @@ class _ChatPageState extends State<ChatPage> {
         return Messages(role: Role.assistant, content: m.text);
       }
     }).toList();
-
-    // Assuming you have set up the OpenAI instance correctly and your API key
-    final openAI = OpenAI.instance.build(
-      token: 'YOUR_OPENAI_API_KEY',
-      baseOption: HttpSetup(
-        receiveTimeout: const Duration(
-          seconds: 5,
-        ),
-      ),
-      enableLog: true,
-    );
-
-    final request = ChatCompleteText(
-      model: Gpt4ChatModel(),
-      messages: _messagesHistory,
-      maxToken: 200,
-    );
-
-    final response = await openAI.onChatCompletion(request: request);
-
-    if (response != null) {
-      for (var element in response.choices) {
-        if (element.message != null) {
-          setState(() {
-            _messages.insert(
-              0,
-              ChatMessage(
-                user: _gptChatUser,
-                createdAt: DateTime.now(),
-                text: element.message!.content,
-              ),
-            );
-          });
-        }
-      }
-    }
-
-    setState(() {
-      _typingUsers.remove(_gptChatUser);
-    });
-  }
-}
-
-class _HoverListTile extends StatefulWidget {
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
-
-  const _HoverListTile({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-  });
-
-  @override
-  __HoverListTileState createState() => __HoverListTileState();
-}
-
-class __HoverListTileState extends State<_HoverListTile> {
-  bool _isHovering = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit: (_) => setState(() => _isHovering = false),
-      child: Container(
-        color: _isHovering ? Colors.grey[300] : Colors.grey[200],
-        child: ListTile(
-          leading: Icon(widget.icon),
-          title: Text(widget.title),
-          onTap: widget.onTap,
-        ),
-      ),
-    );
+    // final request = ChatCompleteText(
+    //   model: Gpt4ChatModel,
+    //   messages: _messagesHistory,
+    //   maxToken: 200,
+    // );
+    // final response = await _openAI.onChatCompletion(request: request);
+    // for (var element in response!.choices) {
+    //   if (element.message != null) {
+    //     setState(() {
+    //       _messages.insert(
+    //         0,
+    //         ChatMessage(
+    //           user: _gptChatUser,
+    //           createdAt: DateTime.now(),
+    //           text: element.message!.content,
+    //         ),
+    //       );
+    //     });
+    //   }
+    // }
+    // setState(() {
+    //   _typingUsers.remove(_gptChatUser);
+    // });
   }
 }
 
@@ -248,9 +232,9 @@ class CustomToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: Alignment.centerLeft, // Aligns the entire row to the left
+      alignment: Alignment.centerLeft,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start, // Aligns items to the top
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -278,7 +262,7 @@ class CustomToggle extends StatelessWidget {
                 ),
                 SizedBox(width: 10.0),
                 Text(
-                  'GPT - 4',
+                  'GPT - 4o',
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -287,9 +271,9 @@ class CustomToggle extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 128.0), // Space between the box and the edit icon
+          SizedBox(width: 128.0),
           Icon(Icons.edit, color: Colors.grey[800]),
-          SizedBox(width: 5.0), // Edit icon outside the box
+          SizedBox(width: 5.0),
         ],
       ),
     );
