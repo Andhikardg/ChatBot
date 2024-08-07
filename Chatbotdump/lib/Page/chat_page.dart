@@ -23,7 +23,7 @@ class _ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1.0),
         actions: [
-          CustomToggle(),
+          CustomToggle(onEditPressed: _clearMessages),
         ],
       ),
       drawer: Drawer(
@@ -54,7 +54,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             ListTile(
               leading: Icon(Icons.history),
-              title: Text('History'),
+              title: Text('Most Question'),
             ),
             Divider(), // Add divider here
             ListTile(
@@ -196,7 +196,6 @@ class _ChatPageState extends State<ChatPage> {
 
   Future<void> getChatResponse(ChatMessage m) async {
     setState(() {
-      // _messages.insert(0, m);
       _typingUsers.add(_gptChatUser);
     });
     List<Messages?> _messagesHistory = _messages.reversed.map((m) {
@@ -206,33 +205,20 @@ class _ChatPageState extends State<ChatPage> {
         return Messages(role: Role.assistant, content: m.text);
       }
     }).toList();
-    // final request = ChatCompleteText(
-    //   model: Gpt4ChatModel,
-    //   messages: _messagesHistory,
-    //   maxToken: 200,
-    // );
-    // final response = await _openAI.onChatCompletion(request: request);
-    // for (var element in response!.choices) {
-    //   if (element.message != null) {
-    //     setState(() {
-    //       _messages.insert(
-    //         0,
-    //         ChatMessage(
-    //           user: _gptChatUser,
-    //           createdAt: DateTime.now(),
-    //           text: element.message!.content,
-    //         ),
-    //       );
-    //     });
-    //   }
-    // }
-    // setState(() {
-    //   _typingUsers.remove(_gptChatUser);
-    // });
+  }
+
+  void _clearMessages() {
+    setState(() {
+      _messages.clear();
+    });
   }
 }
 
 class CustomToggle extends StatelessWidget {
+  final VoidCallback onEditPressed;
+
+  CustomToggle({required this.onEditPressed});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -276,7 +262,10 @@ class CustomToggle extends StatelessWidget {
             ),
           ),
           SizedBox(width: 128.0),
-          Icon(Icons.edit, color: Colors.grey[800]),
+          GestureDetector(
+            onTap: onEditPressed,
+            child: Icon(Icons.edit, color: Colors.grey[800]),
+          ),
           SizedBox(width: 5.0),
         ],
       ),

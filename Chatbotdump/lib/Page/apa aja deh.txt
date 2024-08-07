@@ -54,12 +54,9 @@ class _ChatPageState extends State<ChatPage> {
             ),
             ListTile(
               leading: Icon(Icons.history),
-              title: Text('History'),
-              onTap: () {
-                Navigator.pop(context);
-                _sendSidebarMessage('History');
-              },
+              title: Text('Most Question'),
             ),
+            Divider(), // Add divider here
             ListTile(
               title: Text('Bagaimana prosedur OKR untuk seorang manager atau...'),
               onTap: () {
@@ -67,6 +64,7 @@ class _ChatPageState extends State<ChatPage> {
                 _sendSidebarMessage('Bagaimana prosedur OKR untuk seorang manager atau atasan yang tidak memiliki staf atau posisi dibawahnya kosong?');
               },
             ),
+            Divider(), // Add divider here
             ListTile(
               title: Text('Cuti Bersalin'),
               onTap: () {
@@ -74,6 +72,7 @@ class _ChatPageState extends State<ChatPage> {
                 _sendSidebarMessage('Cuti Bersalin');
               },
             ),
+            Divider(), // Add divider here
             ListTile(
               title: Text('Informasi Umum KDMP'),
               onTap: () {
@@ -81,6 +80,7 @@ class _ChatPageState extends State<ChatPage> {
                 _sendSidebarMessage('Informasi Umum KDMP');
               },
             ),
+            Divider(), // Add divider here
             ListTile(
               title: Text('Bagaimana cara melakukan re-open OKR yang sudah closed ?'),
               onTap: () {
@@ -88,6 +88,7 @@ class _ChatPageState extends State<ChatPage> {
                 _sendSidebarMessage('Bagaimana cara melakukan re-open OKR yang sudah closed ?');
               },
             ),
+            Divider(), // Add divider here
             ListTile(
               title: Text('Kenapa saya tidak bisa update progress OKR ?'),
               onTap: () {
@@ -95,6 +96,7 @@ class _ChatPageState extends State<ChatPage> {
                 _sendSidebarMessage('Kenapa saya tidak bisa update progress OKR ?');
               },
             ),
+            Divider(), // Add divider here
             ListTile(
               title: Text('Untuk OKR yang telah terlanjur di delete apakah bisa dilakukan pengaktifan kembali ?'),
               onTap: () {
@@ -102,6 +104,7 @@ class _ChatPageState extends State<ChatPage> {
                 _sendSidebarMessage('Untuk OKR yang telah terlanjur di delete apakah bisa dilakukan pengaktifan kembali ?');
               },
             ),
+            Divider(), // Add divider here
             ListTile(
               title: Text('Bagaimana solusi untuk OKR yang sudah closed namun tercatat 0% ?'),
               onTap: () {
@@ -109,6 +112,7 @@ class _ChatPageState extends State<ChatPage> {
                 _sendSidebarMessage('Bagaimana solusi untuk OKR yang sudah closed namun tercatat 0% ?');
               },
             ),
+            Divider(), // Add divider here
             ListTile(
               title: Text('Implementasi Cuti Online'),
               onTap: () {
