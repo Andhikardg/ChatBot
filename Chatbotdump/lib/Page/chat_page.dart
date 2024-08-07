@@ -1,6 +1,7 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
+import 'package:chatbotdump/Api/apiservice.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -11,9 +12,9 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final ChatUser _currentUser =
-  ChatUser(id: '1', firstName: 'Telkom', lastName: 'Indonesia');
+      ChatUser(id: '1', firstName: 'Telkom', lastName: 'Indonesia');
   final ChatUser _gptChatUser =
-  ChatUser(id: '2', firstName: 'Telkom', lastName: 'AI');
+      ChatUser(id: '2', firstName: 'Telkom', lastName: 'AI');
   List<ChatMessage> _messages = <ChatMessage>[];
   List<ChatUser> _typingUsers = <ChatUser>[];
 
@@ -58,10 +59,12 @@ class _ChatPageState extends State<ChatPage> {
             ),
             Divider(), // Add divider here
             ListTile(
-              title: Text('Bagaimana prosedur OKR untuk seorang manager atau...'),
+              title:
+                  Text('Bagaimana prosedur OKR untuk seorang manager atau...'),
               onTap: () {
                 Navigator.pop(context);
-                _sendSidebarMessage('Bagaimana prosedur OKR untuk seorang manager atau atasan yang tidak memiliki staf atau posisi dibawahnya kosong?');
+                _sendSidebarMessage(
+                    'Bagaimana prosedur OKR untuk seorang manager atau atasan yang tidak memiliki staf atau posisi dibawahnya kosong?');
               },
             ),
             Divider(), // Add divider here
@@ -82,10 +85,12 @@ class _ChatPageState extends State<ChatPage> {
             ),
             Divider(), // Add divider here
             ListTile(
-              title: Text('Bagaimana cara melakukan re-open OKR yang sudah closed ?'),
+              title: Text(
+                  'Bagaimana cara melakukan re-open OKR yang sudah closed ?'),
               onTap: () {
                 Navigator.pop(context);
-                _sendSidebarMessage('Bagaimana cara melakukan re-open OKR yang sudah closed ?');
+                _sendSidebarMessage(
+                    'Bagaimana cara melakukan re-open OKR yang sudah closed ?');
               },
             ),
             Divider(), // Add divider here
@@ -93,23 +98,28 @@ class _ChatPageState extends State<ChatPage> {
               title: Text('Kenapa saya tidak bisa update progress OKR ?'),
               onTap: () {
                 Navigator.pop(context);
-                _sendSidebarMessage('Kenapa saya tidak bisa update progress OKR ?');
+                _sendSidebarMessage(
+                    'Kenapa saya tidak bisa update progress OKR ?');
               },
             ),
             Divider(), // Add divider here
             ListTile(
-              title: Text('Untuk OKR yang telah terlanjur di delete apakah bisa dilakukan pengaktifan kembali ?'),
+              title: Text(
+                  'Untuk OKR yang telah terlanjur di delete apakah bisa dilakukan pengaktifan kembali ?'),
               onTap: () {
                 Navigator.pop(context);
-                _sendSidebarMessage('Untuk OKR yang telah terlanjur di delete apakah bisa dilakukan pengaktifan kembali ?');
+                _sendSidebarMessage(
+                    'Untuk OKR yang telah terlanjur di delete apakah bisa dilakukan pengaktifan kembali ?');
               },
             ),
             Divider(), // Add divider here
             ListTile(
-              title: Text('Bagaimana solusi untuk OKR yang sudah closed namun tercatat 0% ?'),
+              title: Text(
+                  'Bagaimana solusi untuk OKR yang sudah closed namun tercatat 0% ?'),
               onTap: () {
                 Navigator.pop(context);
-                _sendSidebarMessage('Bagaimana solusi untuk OKR yang sudah closed namun tercatat 0% ?');
+                _sendSidebarMessage(
+                    'Bagaimana solusi untuk OKR yang sudah closed namun tercatat 0% ?');
               },
             ),
             Divider(), // Add divider here
@@ -170,7 +180,7 @@ class _ChatPageState extends State<ChatPage> {
                         borderSide: BorderSide.none,
                       ),
                       contentPadding:
-                      EdgeInsets.symmetric(vertical: 0.5, horizontal: 10.0),
+                          EdgeInsets.symmetric(vertical: 0.5, horizontal: 10.0),
                     ),
                   ),
                 ),
@@ -205,6 +215,24 @@ class _ChatPageState extends State<ChatPage> {
         return Messages(role: Role.assistant, content: m.text);
       }
     }).toList();
+
+    try {
+      final responseText = await sendMessageToApi(m.text);
+
+      setState(() {
+        _messages.insert(
+          0,
+          ChatMessage(
+            user: _gptChatUser,
+            createdAt: DateTime.now(),
+            text: responseText,
+          ),
+        );
+        _typingUsers.remove(_gptChatUser);
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   void _clearMessages() {
