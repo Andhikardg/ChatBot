@@ -17,6 +17,7 @@ class _ChatPageState extends State<ChatPage> {
       ChatUser(id: '2', firstName: 'Telkom', lastName: 'AI');
   List<ChatMessage> _messages = <ChatMessage>[];
   List<ChatUser> _typingUsers = <ChatUser>[];
+  bool waitingresponse = false;
 
   @override
   Widget build(BuildContext context) {
@@ -165,24 +166,25 @@ class _ChatPageState extends State<ChatPage> {
                   onSend: (ChatMessage m) {
                     setState(() {
                       _messages.insert(0, m);
+                      waitingresponse = true;
                     });
                     getChatResponse(m);
                   },
                   messages: _messages,
                   inputOptions: InputOptions(
-                    inputDecoration: InputDecoration(
-                      fillColor: Colors.black26,
-                      filled: true,
-                      hintText: 'Write a Message...',
-                      hintStyle: TextStyle(color: Colors.white),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(40.0),
-                        borderSide: BorderSide.none,
+                      inputDecoration: InputDecoration(
+                        fillColor: Colors.black26,
+                        filled: true,
+                        hintText: 'Write a Message...',
+                        hintStyle: TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 0.5, horizontal: 10.0),
                       ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0.5, horizontal: 10.0),
-                    ),
-                  ),
+                      inputDisabled: waitingresponse),
                 ),
               ),
             ],
@@ -200,6 +202,7 @@ class _ChatPageState extends State<ChatPage> {
     );
     setState(() {
       _messages.insert(0, message);
+      waitingresponse = true;
     });
     getChatResponse(message);
   }
@@ -229,9 +232,14 @@ class _ChatPageState extends State<ChatPage> {
           ),
         );
         _typingUsers.remove(_gptChatUser);
+        waitingresponse = false;
       });
     } catch (e) {
       print('Error: $e');
+      setState(() {
+        _typingUsers.remove(_gptChatUser);
+        waitingresponse = false;
+      });
     }
   }
 
