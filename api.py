@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from time import time
 import torch
 import transformers
@@ -18,8 +18,8 @@ app = Flask(__name__)
 CORS(app)
 
 ## FILL BELOW PART WITH INFORMATION OF YOUR DATASET AND MODEL
-dataset_name = 'dataset' # fill with dataset directory name/location
-doc_column = 'cleaned_text' # fill with column name that contains text data
+dataset_name = 'sample_dataset' # fill with dataset directory name/location
+doc_column = 'text' # fill with column name that contains text data
 emb_model='LazarusNLP/all-indo-e5-small-v4' # fill with embedding model name
 tg_model = 'kalisai/Nusantara-7b-Indo-Chat' # fill with text-generation model name
 ## FILL ABOVE PART WITH INFORMATION OF YOUR DATASET AND MODEL
@@ -66,7 +66,7 @@ llm = HuggingFacePipeline(pipeline=query_pipeline)
 
 # Function to load dataset and embed document within it
 def embed_text(dataset_name: str=dataset_name,document_column:str=doc_column,embedding_model:str=emb_model) -> pd.DataFrame:
-    df = pd.read_csv(f"./{dataset_name}.csv")
+    df = pd.read_csv(f"{dataset_name}.csv")
     df[document_column] = df[document_column].fillna('')
     embedder = SentenceTransformer(embedding_model)
     df['embedded_doc'] = df[document_column].apply(lambda text: embedder.encode(text))
@@ -133,6 +133,11 @@ def chatbot_api():
     except Exception as e:
         print("Error:", e)  # Log any exception that occurs
         return jsonify({'response': 'Internal server error'}), 500
+
+@app.route('/')
+def index():
+    # Serve the HTML file
+    return render_template('web\src\index.html')
 
 # Run the app
 if __name__ == '__main__':
